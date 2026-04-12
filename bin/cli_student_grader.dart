@@ -4,7 +4,7 @@ void main() {
   const appTitle = "Student Grade Student Grade v1.0";
   print(".................$appTitle...............");
 
-  List<Map<String, dynamic>> studentList = [];
+  List<Map<String?, dynamic>> studentList = [];
   ;
   final Set<String> subject = {"English", "Math", "Science,Bangle"};
 
@@ -26,6 +26,24 @@ void main() {
 
     switch (option) {
       case 1:
+        //student name prompt
+        print("Add Student name:");
+
+        //create the student map
+        Map<String?, dynamic> student = {
+          "name": stdin.readLineSync()!,
+          "Subject": [...subject],
+          "score": null,
+          "bonus": null,
+          "comment": null,
+        };
+
+        //add student to the list
+        studentList.add(student);
+
+        //confirmation message
+        print("Student ${student["name"]} added successfully");
+
         continue;
 
       case 2:
