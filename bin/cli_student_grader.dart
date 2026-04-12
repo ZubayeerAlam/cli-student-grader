@@ -5,7 +5,6 @@ void main() {
   print(".................$appTitle...............");
 
   List<Map<String?, dynamic>> studentList = [];
-  ;
   final Set<String> subject = {"English", "Math", "Science,Bangle"};
 
   do {
@@ -33,7 +32,7 @@ void main() {
         Map<String?, dynamic> student = {
           "name": stdin.readLineSync()!,
           "Subject": [...subject],
-          "score": null,
+          "score": [],
           "bonus": null,
           "comment": null,
         };
@@ -47,6 +46,51 @@ void main() {
         continue;
 
       case 2:
+        //Show a numbered list of the students
+        print("Number List of the Students:");
+        for (int i = 0; i < studentList.length; i++) {
+          print("${i + 1}. ${studentList[i]["name"]}");
+        }
+
+        // Teacher picks a student
+        int studentNumber;
+        while (true) {
+          print("Enter the student number:");
+          studentNumber = int.parse(stdin.readLineSync()!);
+
+          if (studentNumber < 1 || studentNumber > studentList.length) {
+            print("Invalid student number. Please try again.");
+            continue;
+          }
+          else{
+            break;
+          }
+        }
+
+        //show available subject
+        print("Available Subject : ${studentList[studentNumber - 1]["Subject"]}");
+
+        //add the score for each subject
+        for(int i=0;i<subject.length;i++) {
+          print("Enter  subject ${i+1}: mark:");
+          int mark;
+          while (true) {
+            mark=int.parse(stdin.readLineSync()!);
+            if (mark < 0 || mark > 100) {
+              print("Invalid mark. Please try again.");
+              continue;
+            }
+            else {
+              break;
+            }
+          }
+
+          //add the score to the score list
+          studentList[studentNumber - 1]["score"].add(mark);
+          print("Score added successfully");
+        }
+
+        print(studentList);
         continue;
 
       case 3:
