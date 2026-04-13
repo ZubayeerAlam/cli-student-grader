@@ -190,6 +190,7 @@ void main() {
         continue;
 
       case 6:
+        //show all student
         print("select a student for report card:");
         for (int i = 0; i < studentList.length; i++) {
           print("${i + 1}. ${studentList[i]["name"]}");
@@ -209,23 +210,23 @@ void main() {
           }
         }
 
+        //calculate the average and grade
         String Grade;
         dynamic totalScore = 0;
-        for (
-          int i = 0;
-          i < studentList[studentNumber - 1]["score"]?.length;
-          i++
+        for (int i = 0; i < studentList[studentNumber - 1]["score"]?.length; i++
         ) {
           totalScore += studentList[studentNumber - 1]["score"][i];
         }
+
+        //use if-else to assign grade
         var average = totalScore / studentList[studentNumber - 1]["score"].length;
         if (average >= 90) {
           Grade = "A";
-        } else if (average >= 80) {
+        } else if (average >= 80 && average < 90) {
           Grade = "B";
-        } else if (average >= 70) {
+        } else if (average >= 70 && average < 80) {
           Grade = "C";
-        } else if (average >= 60) {
+        } else if (average >= 60 && average < 70) {
           Grade = "D";
         } else {
           Grade = "F";
@@ -233,6 +234,7 @@ void main() {
 
         var finalAvrg=average+(studentList[studentNumber - 1]["bonus"]?? 0);
 
+        //print report card
         print('''
         
         ╔══════════════════════════════╗
@@ -248,6 +250,17 @@ void main() {
         .
         
         ''');
+
+        //Feedback Line
+        String feedback = switch (Grade) {
+          "A" => "Outstanding performance!",
+          "B" => "Good work, keep it up!",
+          "C" => "Satisfactory. Room to improve.",
+          "D" => "Needs improvement.",
+          "F" => "Failing. Please seek help.",
+          _   => "Unknown grade.",
+        };
+        print(feedback);
           continue;
 
       case 7:
