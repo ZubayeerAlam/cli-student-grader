@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 void main() {
@@ -61,26 +62,26 @@ void main() {
           if (studentNumber < 1 || studentNumber > studentList.length) {
             print("Invalid student number. Please try again.");
             continue;
-          }
-          else{
+          } else {
             break;
           }
         }
 
         //show available subject
-        print("Available Subject : ${studentList[studentNumber - 1]["Subject"]}");
+        print(
+          "Available Subject : ${studentList[studentNumber - 1]["Subject"]}",
+        );
 
         //add the score for each subject
-        for(int i=0;i<subject.length;i++) {
-          print("Enter  subject ${i+1}: mark:");
+        for (int i = 0; i < subject.length; i++) {
+          print("Enter  subject ${i + 1}: mark:");
           int mark;
           while (true) {
-            mark=int.parse(stdin.readLineSync()!);
+            mark = int.parse(stdin.readLineSync()!);
             if (mark < 0 || mark > 100) {
               print("Invalid mark. Please try again.");
               continue;
-            }
-            else {
+            } else {
               break;
             }
           }
@@ -94,9 +95,81 @@ void main() {
         continue;
 
       case 3:
+        //prompt to choose the students to give bonus points
+        print("Choose a student for bonus points:");
+        for (int i = 0; i < studentList.length; i++) {
+          print("${i + 1}. ${studentList[i]["name"]}");
+        }
+
+        //choose a student
+        int studentNumber;
+        while (true) {
+          print("Enter the student number:");
+          studentNumber = int.parse(stdin.readLineSync()!);
+
+          if (studentNumber < 1 || studentNumber > studentList.length) {
+            print("Invalid student number. Please try again.");
+            continue;
+          } else {
+            break;
+          }
+        }
+
+        //check if bonus points already set
+        if (studentList[studentNumber - 1]["bonus"] != null) {
+          print("Bonus points already set");
+        } else {
+          //add bonus points
+          print("Enter bonus points(1-10):");
+          int bonus;
+          while (true) {
+            bonus = int.parse(stdin.readLineSync()!);
+            //check if bonus points is valid
+            if (bonus < 1 || bonus > 10) {
+              print("Please try again.");
+              continue;
+            } else {
+              break;
+            }
+          }
+          //add bonus points to the student
+          studentList[studentNumber - 1]["bonus"] ??= bonus;
+          print("Bonus points added successfully");
+        }
         continue;
 
       case 4:
+        //prompt to choose a student for comment
+        print("Choose a student for comment:");
+        for (int i = 0; i < studentList.length; i++) {
+          print("${i + 1}. ${studentList[i]["name"]}");
+        }
+
+        //choose a student for comment
+        int studentNumber;
+        while (true) {
+          print("Enter the student number:");
+          studentNumber = int.parse(stdin.readLineSync()!);
+
+          if (studentNumber < 1 || studentNumber > studentList.length) {
+            print("Invalid student number. Please try again.");
+            continue;
+          } else {
+            break;
+          }
+        }
+        //Show student have a comment or not
+        String display =
+            studentList[studentNumber - 1]["comment"]?.toUpperCase() ??
+            "No comment provided";
+        print("Comment: $display");
+
+        //add comment
+        print("Add comment ");
+        String? comment = stdin.readLineSync()!;
+        studentList[studentNumber - 1]["comment"] = comment;
+        print("Comment added successfully");
+
         continue;
 
       case 5:
