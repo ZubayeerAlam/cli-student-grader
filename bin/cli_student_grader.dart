@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 void main() {
@@ -173,10 +174,81 @@ void main() {
         continue;
 
       case 5:
+        //view all students
+        print("Student List:");
+
+        var tags = [
+          for (var student in studentList)
+            {
+              "Name: ${student["name"]} \n",
+              "Score: ${student["score"].length} scores \n",
+              if (student["bonus"] != null) "⭐️has a bonus \n",
+              "------------------------------------- \n",
+            },
+        ];
+        print(tags);
         continue;
 
       case 6:
-        continue;
+        print("select a student for report card:");
+        for (int i = 0; i < studentList.length; i++) {
+          print("${i + 1}. ${studentList[i]["name"]}");
+        }
+
+        //choose a student
+        int studentNumber;
+        while (true) {
+          print("Enter the student number:");
+          studentNumber = int.parse(stdin.readLineSync()!);
+
+          if (studentNumber < 1 || studentNumber > studentList.length) {
+            print("Invalid student number. Please try again.");
+            continue;
+          } else {
+            break;
+          }
+        }
+
+        String Grade;
+        dynamic totalScore = 0;
+        for (
+          int i = 0;
+          i < studentList[studentNumber - 1]["score"]?.length;
+          i++
+        ) {
+          totalScore += studentList[studentNumber - 1]["score"][i];
+        }
+        var average = totalScore / studentList[studentNumber - 1]["score"].length;
+        if (average >= 90) {
+          Grade = "A";
+        } else if (average >= 80) {
+          Grade = "B";
+        } else if (average >= 70) {
+          Grade = "C";
+        } else if (average >= 60) {
+          Grade = "D";
+        } else {
+          Grade = "F";
+        }
+
+        var finalAvrg=average+(studentList[studentNumber - 1]["bonus"]?? 0);
+
+        print('''
+        
+        ╔══════════════════════════════╗
+        ║       REPORT CARD            ║
+        ╠══════════════════════════════╝
+        ║  Name:    ${studentList[studentNumber - 1]["name"]}       ║
+        ║  Scores:  ${studentList[studentNumber - 1]["score"]}       ║
+        ║  Bonus:   ${studentList[studentNumber - 1]["bonus"] ?? 0}                 ║
+        ║  Average:  ${finalAvrg.toStringAsFixed(2)}             ║
+        ║  Grade:    $Grade                 ║
+        ║  Comment:  ${studentList[studentNumber - 1]["comment"] ?? "No comment"}        ║
+        ╚══════════════════════════════╝
+        .
+        
+        ''');
+          continue;
 
       case 7:
         break;
