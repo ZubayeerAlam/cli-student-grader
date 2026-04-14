@@ -213,13 +213,17 @@ void main() {
         //calculate the average and grade
         String Grade;
         dynamic totalScore = 0;
-        for (int i = 0; i < studentList[studentNumber - 1]["score"]?.length; i++
+        for (
+          int i = 0;
+          i < studentList[studentNumber - 1]["score"]?.length;
+          i++
         ) {
           totalScore += studentList[studentNumber - 1]["score"][i];
         }
 
         //use if-else to assign grade
-        var average = totalScore / studentList[studentNumber - 1]["score"].length;
+        var average =
+            totalScore / studentList[studentNumber - 1]["score"].length;
         if (average >= 90) {
           Grade = "A";
         } else if (average >= 80 && average < 90) {
@@ -232,7 +236,8 @@ void main() {
           Grade = "F";
         }
 
-        var finalAvrg=average+(studentList[studentNumber - 1]["bonus"]?? 0);
+        var finalAvrg =
+            average + (studentList[studentNumber - 1]["bonus"] ?? 0);
 
         //print report card
         print('''
@@ -258,13 +263,105 @@ void main() {
           "C" => "Satisfactory. Room to improve.",
           "D" => "Needs improvement.",
           "F" => "Failing. Please seek help.",
-          _   => "Unknown grade.",
+          _ => "Unknown grade.",
         };
         print(feedback);
-          continue;
+        continue;
 
       case 7:
-        break;
+        //no students added yet
+        if (studentList.isEmpty) {
+          print("No students available.");
+          break;
+        }
+
+        int totalStudents = studentList.length;
+        double totalAllScores = 0;
+        int totalScoreCount = 0;
+        int passCount = 0;
+
+        double highestAvg = double.negativeInfinity;
+        double lowestAvg = double.infinity;
+
+        // Set for unique grade letters
+        Set<String> uniqueGrades = {};
+
+        // student pass
+        for (int i = 0; i < studentList.length; i++) {
+          List<dynamic> scores = studentList[i]["score"] ?? [];
+          int bonus = studentList[i]["bonus"] ?? 0;
+
+          // Skip students who have no scores recorded yet
+          if (scores.isEmpty) continue;
+
+          dynamic total = 0;
+          for (dynamic score in scores) {
+            total += score;
+          }
+
+          double average = total / scores.length;
+          double finalAvg = average + bonus;
+
+          // Logical operators: count students who have scores AND are passing
+          if (scores.isNotEmpty && finalAvg >= 60) {
+            passCount++;
+          }
+
+          // Determine grade letter for this student
+          String grade;
+          if (finalAvg >= 90)
+            grade = "A";
+          else if (finalAvg >= 80 && finalAvg < 90)
+            grade = "B";
+          else if (finalAvg >= 70 && finalAvg < 80)
+            grade = "C";
+          else if (finalAvg >= 60 && finalAvg < 70)
+            grade = "D";
+          else
+            grade = "F";
+
+          uniqueGrades.add(grade); // Set automatically ignores duplicates
+
+          // Track highest / lowest average
+          if (finalAvg > highestAvg) {
+            highestAvg = finalAvg;
+          }
+          if (finalAvg < lowestAvg) {
+            lowestAvg = finalAvg;
+          }
+        }
+
+
+        // getAverage function
+        double getAverage(Map student) {
+          List <dynamic>scores = student["score"];
+          int bonus = student["bonus"] ?? 0;
+
+          dynamic total = 0;
+          for (var score in scores) total += score;
+
+          double average = total / scores.length;
+          return average + bonus;
+        }
+
+
+        // Overall class average
+        double classAvg=0;
+        for (var student in studentList) {
+          classAvg+=getAverage(student);
+        }
+      // summary list
+      var summaryLines = [
+        for (var student in studentList)
+            "${student["name"]}: avg = ${getAverage(student).toStringAsFixed(2)}",
+        "Total students: $totalStudents",
+        "Passing students: $passCount",
+        "Class average: ${classAvg.toStringAsFixed(2)}",
+        "Unique grades: $uniqueGrades"
+      ];
+        print(summaryLines);
+
+        continue;
 
       case 8:
         print("Exit");
